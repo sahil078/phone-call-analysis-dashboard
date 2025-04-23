@@ -43,7 +43,8 @@ const Login = ({ onLogin }) => {
           onChange={(e) => setEmail(e.target.value)}
           style={loginStyles.input}
           required
-        />
+        />    
+        
         <input
           type="password"
           placeholder="Password"
@@ -84,7 +85,7 @@ const Dashboard = ({ onLogout }) => {
     setError(null);
     try {
       const formattedDate = format(date, 'yyyy-MM-dd');
-      
+
       // Reset expanded rows and transcriptions when date changes
       setExpandedRows({});
       setTranscriptions({});
@@ -115,7 +116,7 @@ const Dashboard = ({ onLogout }) => {
         positive: summaryData.sentiment_breakdown?.Positive || 0,
         negative: summaryData.sentiment_breakdown?.Negative || 0
       });
-      
+
       setCallData(Array.isArray(detailsData) ? detailsData : [detailsData]);
     } catch (err) {
       setError(err.message);
@@ -135,7 +136,7 @@ const Dashboard = ({ onLogout }) => {
 
   const fetchWeeklyData = async () => {
     try {
-    const response = await fetch(`${process.env.REACT_APP_WEEKLY_CALL_SUMMARY_API}`);
+      const response = await fetch(`${process.env.REACT_APP_WEEKLY_CALL_SUMMARY_API}`);
       if (!response.ok) {
         throw new Error("Failed to fetch weekly data");
       }
@@ -150,19 +151,18 @@ const Dashboard = ({ onLogout }) => {
 
   const fetchTranscription = async (callId, index) => {
     if (transcriptions[index]) return; // Already fetched
-    
+
     try {
       const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-     const response = await fetch(`${process.env.REACT_APP_CALL_API}?date=${formattedDate}&call_id=${callId}`);
+      const response = await fetch(`${process.env.REACT_APP_CALL_API}?date=${formattedDate}&call_id=${callId}`);
 
-      
       if (!response.ok) {
         throw new Error("Failed to fetch transcription");
       }
-      
+
       const data = await response.json();
-      const callDetails = Array.isArray(data) ? data.find(item => item.call_id === callId) : data;
-      
+      const callDetails = Array.isArray(data) ? data.find(item => item.id === callId) : data;
+
       if (callDetails && callDetails.transcription) {
         setTranscriptions(prev => ({
           ...prev,
@@ -293,6 +293,21 @@ const Dashboard = ({ onLogout }) => {
               }
             />
           </div>
+
+          <button
+            onClick={() => fetchDailyData(selectedDate)}
+            style={{
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "5px",
+              cursor: "pointer",
+              marginLeft: "20px"
+            }}
+          >
+            🔄 Refresh
+          </button>
         </div>
 
         {loading && (
@@ -301,7 +316,7 @@ const Dashboard = ({ onLogout }) => {
             <p>Loading call data...</p>
           </div>
         )}
-        
+
         {error && (
           <div style={errorStyles}>
             <p>No Data available for this date</p>
@@ -449,17 +464,17 @@ const Dashboard = ({ onLogout }) => {
                 {callData.map((item, index) => (
                   <React.Fragment key={`call-${index}`}>
                     <tr>
-                      <td style={tableCellStyle}>{item.Date || 'N/A'}</td>
-                      <td style={tableCellStyle}>{item.Outgoing_0r_Incoming || 'N/A'}</td>
-                      <td style={tableCellStyle}>{item.Customer_Name_or_Number || 'N/A'}</td>
-                      <td style={tableCellStyle}>{item.Branch_Name || 'N/A'}</td>
-                      <td style={tableCellStyle}>{item.Phone_number_of_caller || 'N/A'}</td>
-                      <td style={tableCellStyle}>{item.Summary_of_call || 'N/A'}</td>
-                      <td style={tableCellStyle}>{item.Sentiment_of_call || 'N/A'}</td>
-                      <td style={tableCellStyle}>{item.Duration_of_Call || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.date || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.outgoing_or_incoming || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.customer_name_or_number || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.branch_name || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.phone_number_of_caller || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.summary_of_call || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.sentiment_of_call || 'N/A'}</td>
+                      <td style={tableCellStyle}>{item.duration_of_call || 'N/A'}</td>
                       <td style={tableCellStyle}>
-                        <button 
-                          onClick={() => toggleRowExpand(index, item.call_id)}
+                        <button
+                          onClick={() => toggleRowExpand(index, item.id)} // use item.id for fetch
                           style={viewMoreButtonStyle}
                         >
                           {expandedRows[index] ? (
@@ -474,14 +489,15 @@ const Dashboard = ({ onLogout }) => {
                         </button>
                       </td>
                     </tr>
+
                     {expandedRows[index] && (
                       <tr>
                         <td colSpan="9" style={{ ...tableCellStyle, backgroundColor: '#2A2A2A' }}>
                           <div style={{ padding: '10px' }}>
                             <h4>Call Transcription:</h4>
-                            <p style={{ fontStyle: 'italic' }}>
+                            <div style={{ fontStyle: 'italic', whiteSpace: 'pre-line', textAlign: 'left', alignItems: 'center' }}>
                               {transcriptions[index] || "Loading transcription..."}
-                            </p>
+                            </div>
                           </div>
                         </td>
                       </tr>
