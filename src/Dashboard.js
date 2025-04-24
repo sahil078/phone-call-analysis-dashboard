@@ -43,8 +43,8 @@ const Login = ({ onLogin }) => {
           onChange={(e) => setEmail(e.target.value)}
           style={loginStyles.input}
           required
-        />    
-        
+        />
+
         <input
           type="password"
           placeholder="Password"
@@ -293,21 +293,6 @@ const Dashboard = ({ onLogout }) => {
               }
             />
           </div>
-
-          <button
-            onClick={() => fetchDailyData(selectedDate)}
-            style={{
-              backgroundColor: "#4CAF50",
-              color: "#fff",
-              border: "none",
-              padding: "10px 20px",
-              borderRadius: "5px",
-              cursor: "pointer",
-              marginLeft: "20px"
-            }}
-          >
-            🔄 Refresh
-          </button>
         </div>
 
         {loading && (
@@ -637,25 +622,27 @@ const errorStyles = {
 };
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
-  return (
-    <div>
-      {!isLoggedIn ? (
-        <Login onLogin={handleLogin} />
-      ) : (
-        <Dashboard onLogout={handleLogout} />
-      )}
-    </div>
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(()=>
+    localStorage.getItem("isLoggedIn") === "true");
+    const handleLogin = () => {
+      setIsLoggedIn(true);
+      localStorage.setItem("isLoggedIn", "true");
+    }
+  
+    const handleLogout = () => {
+      setIsLoggedIn(false);
+      localStorage.setItem("isLoggedIn", "false");
+    }
+  
+    return (
+      <div>
+        {!isLoggedIn ? (
+          <Login onLogin={handleLogin} />
+        ) : (
+          <Dashboard onLogout={handleLogout} />
+        )}
+      </div>
+    );
 };
 
 export default App;
