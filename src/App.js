@@ -1,27 +1,13 @@
-import React, { useState } from "react";
-import Login from "./Components/Login";
-import Dashboard from "./Components/Dashboard";
+import logo from './logo.svg';
+import './App.css';
+import Dashboard from './Dashboard';
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(() =>
-    localStorage.getItem("isLoggedIn") === "true"
-  );
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    localStorage.setItem("isLoggedIn", "true");
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.setItem("isLoggedIn", "false");
-  };
-
+function App() {
   return (
-    <div>
-      {!isLoggedIn ? <Login onLogin={handleLogin} /> : <Dashboard onLogout={handleLogout} />}
+    <div className="App">
+      <Dashboard />
     </div>
   );
-};
+}
 
 export default App;
