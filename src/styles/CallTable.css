@@ -1,0 +1,14 @@
+
+.call-table-container {
+    margin-top: 60px;
+    overflow-x: auto;
+    width: 100%;
+  }
+  
+  @media (max-width: 768px) {
+    .call-table-container {
+      position: relative;
+      top: 50px;
+    }
+  }
+  

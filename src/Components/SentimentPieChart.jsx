@@ -1,10 +1,11 @@
 import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { COLORS } from "../constants/constants";
+import "../styles/SentimentPieChart.css"; 
 
 const SentimentPieChart = ({ sentimentData }) => {
   return (
-    <div style={{ minHeight: "300px", height: "40vh" }}>
+    <div className="sentiment-container">
       <h2>Sentiment Breakdown</h2>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
