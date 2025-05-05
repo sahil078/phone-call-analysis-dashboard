@@ -13,7 +13,6 @@ import ErrorMessage from "./ErrorMessage";
 import {
   fetchDailyData,
   fetchWeeklyData,
-  fetchTranscription,
 } from "../api/api";
 import { COLORS, SENTIMENT_LABELS } from "../constants/constants";
 
@@ -33,8 +32,6 @@ const Dashboard = ({ onLogout }) => {
 
   const [weeklyStats, setWeeklyStats] = useState([]);
   const [callData, setCallData] = useState([]);
-  const [expandedRows, setExpandedRows] = useState({});
-  const [transcriptions, setTranscriptions] = useState({});
 
   useEffect(() => {
     const loadData = async () => {
@@ -75,20 +72,6 @@ const Dashboard = ({ onLogout }) => {
 
   const toggleSidebar = () => {
     setSidebarOpen((prev) => !prev);
-  };
-
-  const toggleRowExpand = async (index, callId) => {
-    if (!expandedRows[index]) {
-      const transcript = await fetchTranscription(selectedDate, callId);
-      setTranscriptions((prev) => ({
-        ...prev,
-        [index]: transcript,
-      }));
-    }
-    setExpandedRows((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
   };
 
   const sentimentData = [
@@ -135,14 +118,7 @@ const Dashboard = ({ onLogout }) => {
           !loading && !error && <NoDataMessage date={selectedDate} />
         )}
 
-        {callData.length > 0 && (
-          <CallTable
-            callData={callData}
-            expandedRows={expandedRows}
-            toggleRowExpand={toggleRowExpand}
-            selectedDate={selectedDate}
-          />
-        )}
+        {callData.length > 0 && <CallTable callData={callData} />}
       </div>
     </div>
   );
