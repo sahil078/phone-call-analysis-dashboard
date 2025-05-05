@@ -5,16 +5,14 @@ const TranscriptionRow = ({ transcription, transcriptionClean, onClose }) => {
   return (
     <div className="transcription-modal-overlay">
       <div className="transcription-modal-content">
-        <h2>Transcription With Speaker Labels (Beta Version)</h2>
-
         <div className="transcription-row-container">
           <div className="transcription-box">
-            <div className="transcription-title">Cleaned Transcription:</div>
+            <div className="transcription-title">Transcription</div>
             {transcriptionClean || "Not Available. Please contact admin..."}
           </div>
 
           <div className="transcription-box">
-            <div className="transcription-title">Raw Transcription:</div>
+            <div className="transcription-title">Speaker Labelled Transcription (beta stage)</div>
             {transcription || "No transcription available."}
           </div>
         </div>
