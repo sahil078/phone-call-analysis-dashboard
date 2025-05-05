@@ -8,6 +8,7 @@ import {
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import TranscriptionRow from "./TranscriptionRow";
 import { fetchTranscription } from "../api/api";
+import "../styles/CallTable.css";
 
 const CallTable = ({ callData, expandedRows, toggleRowExpand, selectedDate }) => {
   const [sentimentFilter, setSentimentFilter] = useState("All");
@@ -48,8 +49,8 @@ const CallTable = ({ callData, expandedRows, toggleRowExpand, selectedDate }) =>
   });
 
   return (
-    <div style={{ marginTop: "60px", overflowX: "auto", width: "100%" }}>
-      <h2>Call Details</h2>
+<div className="call-table-container">
+        <h2>Call Details</h2>
 
       {/* Filter */}
       <div style={{ marginBottom: "10px", display: "flex", alignItems: "center", gap: "10px" }}>

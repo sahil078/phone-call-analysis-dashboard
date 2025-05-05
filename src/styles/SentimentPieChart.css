@@ -1,0 +1,13 @@
+/* SentimentPieChart.css */
+.sentiment-container {
+    min-height: 300px;
+    height: 40vh;
+  }
+  
+  @media (max-width: 768px) {
+    .sentiment-container {
+      position: relative;
+      top: 50px;
+    }
+  }
+  
